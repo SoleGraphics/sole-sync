@@ -1,0 +1,20 @@
+# System stuff you pry don't want to sync
+.DS_Store
+.env
+.git
+.git*
+.htaccess
+.htpasswds
+.vscode
+.well-known
+cgi-bin
+debug.log
+error_log
+node_modules
+*.ini
+
+# Your sync scripts
+sync-exclude
+sync-exclude-*
+sync-preset
+sync-preset-*

@@ -1,0 +1,14 @@
+# Remote hostname
+host=mysite.com
+
+# Remote path
+path=public_html/
+
+# Remote username
+user=myusername
+
+# Optional remote port (if non-standard)
+#port=
+
+# Optional path to non-default exclude
+#exclude=

@@ -1,0 +1,7 @@
+sync-exclude
+sync-exclude-*
+!sync-exclude-example
+
+sync-preset
+sync-preset-*
+!sync-preset-example
