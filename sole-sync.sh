@@ -1,24 +1,5 @@
 #!/bin/bash
 
-################################################################################################################
-#
-# WELCOME to SOLE-SYNC
-# A quickie bash script to easily push/pull sites to/from a remote via RSYNC. It's inteded to help
-# keep remotes and locals sync'd when .git or other methods aren't an option for you. Also,
-# it's a much much faster than FTP for large sites and files.
-#
-# GETTING STARTED
-# 1. Make this script global "sole-sync" or whatever you want to name your alias:
-#    https://stackoverflow.com/questions/3560326/how-to-make-a-shell-script-global
-# 2. Go to your project folder
-# 3. Optionally create your sync-exclude and sync-preset file(s)
-# 4. Run "sole-sync [OPTIONS]" and enjoy
-#
-# DOCS
-# run "sole-sync --help", that's all there is
-#
-################################################################################################################
-
 ####################################################
 # Configuration
 ####################################################
