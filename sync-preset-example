@@ -7,6 +7,9 @@ path=public_html/
 # Remote username
 user=myusername
 
+# Optional path to key file
+#key=./PATH_TO_PEM_KEY_FILE
+
 # Optional remote port (if non-standard)
 #port=
 

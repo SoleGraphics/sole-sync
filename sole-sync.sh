@@ -22,7 +22,9 @@ RSYNC_OPTIONS=rvc
 OPT_DELETE=
 OPT_DRY_RUN=--dry-run
 OPT_EXCLUDES=
+OPT_KEY=
 OPT_PORT=
+OPT_SSH=
 
 # Colors
 ESC_SEQ="\x1b["
@@ -48,6 +50,37 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+####################################################
+# Help
+####################################################
+
+__HELP="
+Usage: $(basename $0) [OPTIONS]
+
+Options:
+  --delete                  Remove unmatching files in the destination (default: false)
+  --exclude [filepath]      Relative path to exclude file (default: ${exclude})
+  --help                    Looks like you've already found it!
+  --key [filepath]          Optional path to ssh key file
+  --live                    Don't do a dry run, do it for R E A L (default: false)
+  --port [number]           Specify a non-standard ssh port
+  --preset [filepath]       Relative path to preset file (default: ${preset})
+  --pull                    Pull from the remote (default: push)
+  --src [path]              Local source directory (default: ${src})
+  --<var> [string]          Any preset variables not defined in presets (host, path, user)
+
+NOTE: Any of the options other than preset or help may be defined in your preset file(s).
+"
+
+if [ -n "${help+set}" ]; then
+  echo -e "$__HELP";
+  exit 1
+fi
+
+####################################################
+# Check that must have vars are set
+####################################################
+
 # Check preset file
 if [ -e ${preset} ]; then
   . ${preset}
@@ -70,9 +103,20 @@ fi
 # Option configuration based on settings
 ####################################################
 
+# SSH Key
 # Port
+if [ -n "${key+set}" ]; then
+  OPT_KEY="-i $key"
+fi
+
+# SSH Port
 if [ -n "${port+set}" ]; then
-  OPT_PORT="-e 'ssh -p $port'"
+  OPT_PORT="-p $port"
+fi
+
+# SSH Options
+if [[ ! -z "$OPT_KEY" || ! -z "$OPT_PORT" ]]; then
+  OPT_SSH="-e 'ssh $OPT_KEY $OPT_PORT'"
 fi
 
 # Dry Run (--live)
@@ -100,36 +144,10 @@ if [ -n "${pull+set}" ]
 fi
 
 ####################################################
-# Help
-####################################################
-
-__HELP="
-Usage: $(basename $0) [OPTIONS]
-
-Options:
-  --delete                  Remove unmatching files in the destination (default: false)
-  --exclude [filepath]      Relative path to exclude file (default: ${exclude})
-  --help                    Looks like you've already found it!
-  --live                    Don't do a dry run, do it for R E A L (default: false)
-  --port [number]           Specify a non-standard ssh port
-  --preset [filepath]       Relative path to preset file (default: ${preset})
-  --pull                    Pull from the remote (default: push)
-  --src [path]              Local source directory (default: ${src})
-  --<var> [string]          Any preset variables not defined in presets (host, path, user)
-
-NOTE: Any of the options other than preset or help may be defined in your preset file(s).
-"
-
-if [ -n "${help+set}" ]; then
-  echo -e "$__HELP";
-  exit 1
-fi
-
-####################################################
 # RSYNC execution
 ####################################################
 
-CMD="rsync -$RSYNC_OPTIONS $OPT_PORT $OPT_DELETE $OPT_DRY_RUN $OPT_EXCLUDES $SOURCE $DESTINATION"
+CMD="rsync -$RSYNC_OPTIONS $OPT_SSH $OPT_DELETE $OPT_DRY_RUN $OPT_EXCLUDES $SOURCE $DESTINATION"
 
 # Display the mode being run
 if [ $MODE == "TEST" ]
